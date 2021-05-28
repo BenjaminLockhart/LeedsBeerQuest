@@ -1,0 +1,21 @@
+version: '2.1'
+
+services: 
+
+      # Start postgres
+  postgres:
+    container_name: "leedsbeerquest-postgres"
+    image: postgres:10.5
+    restart: always
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=beerdata
+    build:
+      context: .
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-beer-data:/var/lib/postgresql/data
+volumes:
+    postgres-beer-data:
