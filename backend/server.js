@@ -13,11 +13,14 @@ pool.on('error', (err, client) => {
     console.error('Error on PG client', err);
 });
 
+const handler = modelHandler(pool);
+
 app.get('/', (req, res) => {
     return res.send('API is running');
 });
 
-app.use('/venues', modelHandler, venuesRoutes);
+//More routes would be added here if more tables were added
+app.use('/venues', handler, venuesRoutes);
 
 app.listen(3000, () => {
     console.log('REST API is running on http://localhost:3000');
