@@ -32,7 +32,6 @@ module.exports = class {
     }
 
     async getVenueByName(name) {
-        const client = await this.pool.connect();
         const queryString = `
             SELECT
                 *
@@ -47,8 +46,23 @@ module.exports = class {
         return await query(this.pool, queryString, values);
     }
 
+    async getVenueByCategory(category) {
+        const queryString = `
+            SELECT
+                *
+            FROM
+                venues
+            WHERE
+                replace(lower(category), ' ', '') = $1
+            ORDER BY
+                name DESC, date DESC`;
+
+        const values = [category.toLowerCase().replace(' ', '')];
+        return await query(this.pool, queryString, values);
+    }
+
     async getVenueByTags(tags) {
-        const client = await this.pool.connect();
+        // Go back and make this query better, it's too vague and not fully correct
         const queryString = `
             SELECT
                 *
@@ -64,16 +78,29 @@ module.exports = class {
         return await query(this.pool, queryString, values);
     }
 
-    async updateVenue(venueInfoObj) {
+    async updateVenueByName(name, venueInfoObj) {
 
     }
 
     async createVenue(venueInfoObj) {
-
+        const keysToCreate = Object.keys(venueInfoObj);
+        const values = Object.values(venueInfoObj);
+        const queryString = `
+        INSERT INTO
+            venues ${keysToCreate}`
+        return await query(this.pool, queryString, values);
     }
 
     async deleteVenue(name) {
-
+        const queryString = `
+            DELETE
+            FROM
+                venues
+            WHERE
+                replace(lower(name), ' ', '') = $1`;
+        const values = [name.toLowerCase().replace(' ', '')];
+        return await query(this.pool, queryString, values);
     }
  };
+
  
