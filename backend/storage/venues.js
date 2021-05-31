@@ -79,16 +79,31 @@ module.exports = class {
     }
 
     async updateVenueByName(name, venueInfoObj) {
-
+        const values = Object.values(venueInfoObj);
+        let queryParamString = '';
+        let paramIndex = 1;
+        for (let key in venueInfoObj) {
+            queryParamString += `${key}=$${paramIndex}`;
+            paramIndex++;
+        }
+        const queryString = `
+        UPDATE
+            venues
+        SET ${queryParamString}
+        WHERE name='${name}'`;
+        
+        return await query(this.pool, queryString, values);
     }
 
     async createVenue(venueInfoObj) {
-        const keysToCreate = Object.keys(venueInfoObj);
-        const values = Object.values(venueInfoObj);
+        const keysToCreate = Object.keys(venueInfoObj).join(',');
+        const values = `'${Object.values(venueInfoObj).join('\',\'')}'`;
         const queryString = `
         INSERT INTO
-            venues ${keysToCreate}`
-        return await query(this.pool, queryString, values);
+            venues(${keysToCreate})
+        VALUES
+            (${values})`
+        return await query(this.pool, queryString);
     }
 
     async deleteVenue(name) {
@@ -103,4 +118,3 @@ module.exports = class {
     }
  };
 
- 
