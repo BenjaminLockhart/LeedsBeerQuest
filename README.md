@@ -1,6 +1,6 @@
 # X-Lab - Leeds Beer Quest
 
-I chose the back-end focussed version of this challenge. Firstly, I created a Docker container to host a Postgres database, and I configured it to populate the database with the sample data in the CSV. This was one table which I labelled "venues".
+I chose the back-end focussed version of this challenge. Firstly, I created a Docker container to host a Postgres database, and I configured it to populate the database with the sample data in the CSV. There is one table which I labelled "venues".
 
 `docker-compose up -d` will build the Postgres container. To run the API, run `npm install` to install express and pg, then `npm run start` to kick off server.js. The API runs on port 3000. Of course in theory this could also be dockerized.
 
